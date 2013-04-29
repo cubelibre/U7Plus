@@ -1,0 +1,144 @@
+使用前阅读
+
+前言、
+--------------------------------------------------
+A：任何人调试任何机型都需要增加新的产品配置文件头，并且注明适用的硬件的版本（例如硬件板V1.0，电阻屏幕，硬件板V2.0，电容屏幕）
+    B: 绝对禁止修改其他人员的产品配置头信息，任何有变动的机器，都需要重新生成新的产品配置文件头
+    C: 绝对禁止直接在LINUX的KERNEL下添加文件，所有添加的文件必须放在WISKY的目录下，任何需要添加的部分可以使用转义的方式将文件定位到WISKY目录下。常用的方法是 ：如果是头文件 则将自己的头文件加入到wisky_linux.h，如果是C文件，则按照目前的做法。这样做的目的是尽量少修改原始SDK，方便后续的SDK升级，并且我们的WISKY文件夹方便修改和维护
+    D：任何调试好的硬件模块或对内核部分做过修改的，经过测试没有问题后，及时提交黄成东负责更新
+    E：最新的内核代码保存在服务器邓工用户名williamdeng的目录下，根据实际情况（至少每周1次）更新新的内核，并修改版本号，同时邮件通知其他人员更新的内核部分
+    F: 任何人增加任何的宏定义，需要要有注释部分著名该宏的用途和注意事项，决定禁止只有一个宏开关，但没有说明的情况
+
+一、编码规约：
+--------------------------------------------------
+	1.函数名和变量名统一使用linux风格，全部由小写字母、下划线、阿拉伯数字组成。宏定义使用大写字母、下划线、数字组成。
+	2.所有驱动文件头部包含驱动路径、法律信息，版本修改日志等信息，参考wisky_env.h，增加新驱动时copy过去再做相应修改即可。当驱动有重要更改时在日志项LOG添加简介修改日志。
+	3.带返回值的函数：返回值一律使用内核中linux/errno.h的定义，不另外添加定义，在系统错误时可以统一对照系统错误类型。一般做法是函数没有错误时返回0，当出错时函数返回负整型数，例如“-EFAULT”、“-EINVAL”。
+
+二、主要的头文件：
+--------------------------------------------------
+	1. wisky_env.h
+		wisky_env.h定义硬件版本、包含硬件GPIO配置、LCD分辨率，各种常见的驱动模块等。
+		有新的硬件工程、驱动模块或者功能，只需要在wisky_env.h中添加即可。
+		wisky_env.h头文件放在内核的wisky/include/目录下，为了使各个驱动方便的使用
+		该头文件，在内核头文件目录中建立了文件：“include/wisky_linux.h”，在设备
+		驱动中只需要包含wisky_linux.h头文件即可。使用wisky_env.h头文件中的内容可
+		以用以下语句：
+			#include <linux/wisky_linux.h>
+	2．wisky_gpio_xxx.h (wisky/gpio/)
+		硬件相关的GPIO口配置头文件，根据所使用的硬件板版本进行配置，比如M702使
+		用的wisky_gpio_m702.h和M808使用的wisky_gpio_m808.h。该头文件只由wisky_env.h包含。
+	3. wisky_cfg_xxx.h	(wisky/cfg/)
+		硬件相关的功能模块配置头文件，所有要使用的资源都在wisky_env.h头文件
+		中的资源列表中，需要从这些资源中选择你需要的功能定义即可。比如M702使
+		用的wisky_cfg_m702.h和M808使用的wisky_cfg_m808.h。该头文件最终只由
+		wisky_env.h包含。
+	4. config_xxx_xxx.h (wisky/oem/)
+		有关OEM的配置信息头文件，按客户的名称来命名，新增加客户OEM信息头文件时
+		请按格式增加，先是客户名称，然后接着是机器型号，比如目前已经有的天智伟
+		业市场部OEM配置头文件config_wiskymarket_in.h和台电T760的配置头文件
+		config_teclast_t760.h
+	5. wisky_api_all.h
+		一些共用的API接口声明都放在这个头文件中，驱动中需要使用时需要包含
+		头文件#include <linux/wisky_api.h>。目前已有LED灯的控制接口。
+	6. 注意：wisky_env.h和wisky_cfg_xxx.h头文件中的宏定义末尾不能使用中文注释，
+		只可以使用英文注释，而且要以"WISKY_"开头。
+		
+三、关于调试信息：
+--------------------------------------------------
+	1.wisky_env.h中定义内核打印信息的总开关，KERNEL_LOG_LEVEL 可以设定为从1到7，定义为1时屏蔽所以内核信息输出（包括KERN_ERR），定义为7时可以使能所有内核信息，包括KERN_DEBUG信息。同时还定义了一个共用的模块打印信息宏 WPRINTK，驱动文件中可以通过定义 WISKY_DEBUG 宏，即可使用 WPRINTK来调试本驱动，WPRINTK 使用与printk相同，只是为了统一，而且不用每次从新定义调试宏，当不再需要调试本驱动时，可以将该驱动中的宏 WISKY_DEBUG 注释掉即可。
+	例如：
+		//#define WISKY_DEBUG			//打开或者屏蔽该宏可以使能关闭WPRINTK调试信息。
+		#include <linux/wisky_linux.h>
+
+四、如何添加一个新的硬件版本工程到内核：
+	在这里以添加M808项目为例，具体步骤为：
+	1.在wisky_env.h头文件中定义硬件工程相关名称，同一时间只能有一个WISKY_BOARD_M808。
+	2.根据wisky_env.h中定义的硬件工程，创建相应的GPIO头文件到wisky/include/gpio/wisky_gpio_m808.h，
+		可以从其他项目copy过来进行修改，但是一定要仔细对照原理图校正。
+	3.目前在wisky_env.h中只有部分新的硬件资源可以，根据各个硬件板子的配置进行
+		选择，如果有新的资源配置添加，都要添加到里面的硬件配置资源表，比如原有可以
+		使用的触摸屏驱动WISKY_TOUCHSCREEN_GT801，如果要添加电阻屏使用AK4183转换IC的
+		触摸屏驱动，则添加WISKY_TOUCHSCREEN_AK4183，并在wisky/touchscreen/目录下
+		添加ak4183的触摸屏驱动。（最新的硬件资源表请参考wisky_env.h）
+	4.根据硬件资源进行资源配置，创建wisky/include/cfg/wisky_cfg_m808.h头文件，选择LCD资源、
+		LCD分辨率、按键、codec等。
+		注意文件名wisky_cfg_m808.h中的"m808"必须与WISKY_BOARD_M808宏中的“M808”相同，
+		比如要定义量产板的M808 V10，wisky_env.h中定义的宏为WISKY_BOARD_M808_V10，
+		相应的配置文件为wisky_cfg_m808_V10.h
+	5.在wisky_env.h中包含刚才定义的wisky/include/gpio/wisky_gpio_m808.h和
+		wisky/include/cfg/wisky_cfg_m808.h头文件。
+		//M808 Hardware config
+		#include "../../wisky/include/cfg/wisky_cfg_m808.h"
+		#include "../../wisky/include/gpio/wisky_gpio_m808.h"
+	6.确定wisky_env.h头文件中只定义一个硬件板WISKY_BOARD_XXX和客户配置WISKY_OEM_XXX后，
+		在内核根目录下执行以下命令编译即可：
+		./buildkernel.sh
+
+五、如何添加一个新的客户配置到内核：
+	在这里以添加台电T760客户配置为例，步骤为：
+	1.在wisky_env.h头文件中定义一个新的客户OEM宏，格式为WISKY_OEM_XXX_YYY。
+		其中XXX为客户名称，YYY为客户机型型号。则添加台电T760的宏定义为：
+		#define WISKY_OEM_TECLAST_T760		1
+	2.在wisky/include/oem/目录中新建立台电T760配置头文件：
+		config_teclast_t760.h
+		可以从其他配置头文件copy一份后进行修改，需要在该头文件中曾加预编译判断：
+		#if defined(WISKY_OEM_TECLAST_T760)
+		......
+		#endif
+		以防止WISKY_OEM_TECLAST_T760没有被正确定义。
+		如果需要新增加开机Logo，请参考第四节内核。
+	3.在wisky_env.h头文件中将刚才建立的太T760配置文件包含进来：
+		#include "../../wisky/include/oem/config_teclast_t760.h"
+	4.确定wisky_env.h头文件中只定义一个硬件板WISKY_BOARD_XXX和客户配置WISKY_OEM_TECLAST_T760后，
+		在内核根目录下执行以下命令编译即可：
+		./buildkernel.sh
+
+六、添加一个新的开机logo到内核wisky目录的方法
+--------------------------------------------------
+	目前添加内核开机logo只支持ppm后缀图片，在此以添加 logo_linux_clut224.ppm为例，添加其他ppm开机logo与此类似。
+	1)将 logo_linux_clut224.ppm文件拷贝到wisky\logo\build_logo\ppm\目录下
+	2)在文件 wisky\logo\wisky_logo_main.h 中添加如下数据结构变量声明：
+		extern const struct linux_logo logo_linux_clut224;	
+	3)在文件 wisky\logo\wisky_logo_main.c 中添加如下logo数据引用：
+		#if defined(WISKY_LOGO_LINUX)
+			logo = &logo_linux_clut224;
+		#endif
+	4)在wisky/include/wisky_env.h的资源表的“Boot Logo”项添加宏新logog资源，以供其他工程也可以使用
+		* WISKY_LOGO_LINUX = 选择linux 224-color 开机logo
+	5)在wisky\logo\wisky_logo_data_all.c文件中包含要编译的开机logo：
+		#elif defined(WISKY_LOGO_LINUX)
+		#include "./logo_data_all/logo_linux_clut224.c"
+	6)在你相应的OEM配置头文件(wisky\include\oem\config_xxx.h)中定义宏以使用该开机logo：
+		#define WISKY_LOGO_LINUX	
+	7)到内核根目录执行命令进行编译：
+	./buildkernel.sh
+
+七、内核编译方法
+--------------------------------------------------
+	目前内核编译可以有两种：
+	一是编译单个硬件板+OEM配置文件，编译完成后在内核根目录下生成kernel.img镜像文件。
+		./buildkernel.sh
+	二是编译wisky_env.h文件中所有的硬件板和OEM配置组合：WISKY_BOARD_* + WISKY_OEM_*，
+		编译完成后生成的所有内核镜像文件在out/image/目录下，并以
+		“BoardName_OemName_Date_kernel.img”的格式命名，
+		如果想要让某个WISKY_BOARD_*或者WISKY_OEM_*不参加全编译，可以将相应的宏定义由
+		//#define WISKY_BOARD_M808		1
+		改为：
+		//#!define WISKY_BOARD_M808		1
+		全编译编译命令如下：
+		./build_all.sh
+	
+后话：目前已经整合到WISKY目录中的模块包括：
+--------------------------------------------------
+	Backlight，Battery charge，Camera sensor，GPS，G-Sensor，HDMI，
+	Keyboard，LCD module，Light sensor，Mobile 3G，RTC module，
+	Sound codec，Audio route switch，TouchScreen，Vibrator，WiFi，Bluetooth。
+	
+
+
+
+
+
+
+

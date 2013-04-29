@@ -1,0 +1,8 @@
+choice
+	prompt "HDMI chips select"
+config RK610_HDMI
+	bool "RK610(Jetta) hdmi support"
+	depends on MFD_RK610
+	help
+		Support Jetta(RK610) to hdmi.
+endchoice

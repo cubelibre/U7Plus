@@ -1,0 +1,26 @@
+#!/bin/sh
+
+i=6
+echo "" > logo_charge_clut224.c
+while [ ${i} -ge 0 ]
+do
+#	if [ ${i} -eq 0 ]; then
+#		var="_blank"
+#	elif [ ${i} -eq 7 ]; then
+	if [ ${i} -eq 5 ]; then
+		var="_full"
+	elif [ ${i} -eq 6 ]; then
+		var="_poor"
+	else
+		var=${i}
+	fi
+	pngtopnm ./png/logo_charge${var}.png > logo_charge${var}.pnm
+	pnmquant 224 logo_charge${var}.pnm > logo_charge${var}_clut224.pnm
+	pnmtoplainpnm logo_charge${var}_clut224.pnm > logo_charge${var}_clut224.ppm
+	rm -rf *.pnm
+	./png/pnmtologo -t clut224 -n logo_charge${var}_clut224 -o logo_charge${var}_clut224.c logo_charge${var}_clut224.ppm
+	rm -rf *.ppm
+	cat logo_charge${var}_clut224.c >> logo_charge_clut224.c
+	rm -rf logo_charge${var}_clut224.c
+	i=$((${i}-1))
+done

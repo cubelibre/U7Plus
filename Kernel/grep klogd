@@ -1,0 +1,36 @@
+[H[2J[m(Btop - 12:15:57 up  3:44,  5 users,  load average: 2.06, 1.56, 0.82[m(B[39;49m[K
+Tasks:[m(B[39;49m[m(B 208 [m(B[39;49mtotal,[m(B[39;49m[m(B   1 [m(B[39;49mrunning,[m(B[39;49m[m(B 203 [m(B[39;49msleeping,[m(B[39;49m[m(B   4 [m(B[39;49mstopped,[m(B[39;49m[m(B   0 [m(B[39;49mzombie[m(B[39;49m[K
+Cpu(s):[m(B[39;49m[m(B  0.3%[m(B[39;49mus,[m(B[39;49m[m(B  0.3%[m(B[39;49msy,[m(B[39;49m[m(B  0.0%[m(B[39;49mni,[m(B[39;49m[m(B 98.7%[m(B[39;49mid,[m(B[39;49m[m(B  0.6%[m(B[39;49mwa,[m(B[39;49m[m(B  0.0%[m(B[39;49mhi,[m(B[39;49m[m(B  0.1%[m(B[39;49msi,[m(B[39;49m[m(B  0.0%[m(B[39;49mst[m(B[39;49m[K
+Mem: [m(B[39;49m[m(B  8186204k [m(B[39;49mtotal,[m(B[39;49m[m(B  7780800k [m(B[39;49mused,[m(B[39;49m[m(B   405404k [m(B[39;49mfree,[m(B[39;49m[m(B  1084280k [m(B[39;49mbuffers[m(B[39;49m[K
+Swap:[m(B[39;49m[m(B 23981048k [m(B[39;49mtotal,[m(B[39;49m[m(B        0k [m(B[39;49mused,[m(B[39;49m[m(B 23981048k [m(B[39;49mfree,[m(B[39;49m[m(B  4666648k [m(B[39;49mcached[m(B[39;49m[K
+[6;1H
+[7m  PID USER      PR  NI  VIRT  RES  SHR S %CPU %MEM    TIME+  COMMAND            [m(B[39;49m[K
+[m(B  394 root      20   0     0    0    0 D    2  0.0   0:00.31 flush-8:0          [m(B[39;49m
+[m(B 7663 liutianm  20   0 12580 1208  940 D    2  0.0   0:00.04 find               [m(B[39;49m
+[m(B[m(B 7739 lixiyou   20   0 19220 1368  956 R    2  0.0   0:00.01 top                [m(B[39;49m
+[m(B 7743 liuwenlo  20   0  7624  948  764 D    2  0.0   0:00.01 grep               [m(B[39;49m
+[m(B    1 root      20   0 23688 1968 1320 S    0  0.0   0:01.61 init               [m(B[39;49m
+[m(B    2 root      20   0     0    0    0 S    0  0.0   0:00.01 kthreadd           [m(B[39;49m
+[m(B    3 root      RT   0     0    0    0 S    0  0.0   0:00.01 migration/0        [m(B[39;49m
+[m(B    4 root      20   0     0    0    0 S    0  0.0   0:00.04 ksoftirqd/0        [m(B[39;49m
+[m(B    5 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/0         [m(B[39;49m
+[m(B    6 root      RT   0     0    0    0 S    0  0.0   0:00.02 migration/1        [m(B[39;49m
+[m(B    7 root      20   0     0    0    0 S    0  0.0   0:00.03 ksoftirqd/1        [m(B[39;49m
+[m(B    8 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/1         [m(B[39;49m
+[m(B    9 root      RT   0     0    0    0 S    0  0.0   0:00.01 migration/2        [m(B[39;49m
+[m(B   10 root      20   0     0    0    0 S    0  0.0   0:00.21 ksoftirqd/2        [m(B[39;49m
+[m(B   11 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/2         [m(B[39;49m
+[m(B   12 root      RT   0     0    0    0 S    0  0.0   0:00.10 migration/3        [m(B[39;49m
+[m(B   13 root      20   0     0    0    0 S    0  0.0   0:00.19 ksoftirqd/3        [m(B[39;49m
+[m(B   14 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/3         [m(B[39;49m
+[m(B   15 root      RT   0     0    0    0 S    0  0.0   0:00.01 migration/4        [m(B[39;49m
+[m(B   16 root      20   0     0    0    0 S    0  0.0   0:00.36 ksoftirqd/4        [m(B[39;49m
+[m(B   17 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/4         [m(B[39;49m
+[m(B   18 root      RT   0     0    0    0 S    0  0.0   0:00.32 migration/5        [m(B[39;49m
+[m(B   19 root      20   0     0    0    0 S    0  0.0   0:00.21 ksoftirqd/5        [m(B[39;49m
+[m(B   20 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/5         [m(B[39;49m
+[m(B   21 root      RT   0     0    0    0 S    0  0.0   0:00.01 migration/6        [m(B[39;49m
+[m(B   22 root      20   0     0    0    0 S    0  0.0   0:00.04 ksoftirqd/6        [m(B[39;49m
+[m(B   23 root      RT   0     0    0    0 S    0  0.0   0:00.00 watchdog/6         [m(B[39;49m
+[m(B   24 root      RT   0     0    0    0 S    0  0.0   0:00.03 migration/7        [m(B[39;49m
+[m(B   25 root      20   0     0    0    0 S    0  0.0   0:00.02 ksoftirqd/7        [m(B[39;49m[6;1H[K[6;1H[m(BChange delay from 3.0 to: [?12;25h[m(B[39;49m[?12l[?25h[6;1H[7m Not valid [m(B[39;49m[K[37;1H[?12l[?25h

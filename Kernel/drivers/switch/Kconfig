@@ -1,0 +1,25 @@
+menuconfig SWITCH
+	tristate "Switch class support"
+	help
+	  Say Y here to enable switch class support. This allows
+	  monitoring switches by userspace via sysfs and uevent.
+
+if SWITCH
+
+choice
+	prompt "Switch gpio:"
+	default WISKY_SWITCH_GPIO
+	
+config WISKY_SWITCH_GPIO
+	tristate "Wisky GPIO Swith support"
+	help
+	  Say Y here to enable GPIO based switch support.
+	  
+config SWITCH_GPIO
+	tristate "GPIO Swith support"
+	depends on GENERIC_GPIO
+	help
+	  Say Y here to enable GPIO based switch support.
+endchoice
+
+endif # SWITCH

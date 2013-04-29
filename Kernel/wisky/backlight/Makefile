@@ -1,0 +1,1 @@
+obj-y += wisky_backlight.o
